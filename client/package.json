@@ -1,0 +1,18 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "n 7.6.0",
+    "start": "n use 7.6.0 main.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "freedesktop-notifications": "^1.2.2",
+    "uws": "^8.14.1",
+    "ws": "^3.2.0"
+  }
+}
