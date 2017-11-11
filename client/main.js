@@ -52,7 +52,7 @@ const httpEndpointInstructions = {
     }
   }
   ],
-  appname: "test"
+  appid: "test"
 }
 
 ws.on('open', function open() {

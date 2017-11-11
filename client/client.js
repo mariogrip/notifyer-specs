@@ -1,4 +1,7 @@
+const uuid = require("uuid");
+
 function onMessage(_this, message) {
+  console.log(message);
   try {
     message = JSON.parse(message)
   } catch (e) {
@@ -13,7 +16,7 @@ function onMessage(_this, message) {
       return console.log("no cb")
     _this.callbacks.forEach((callback) => {
       if (callback.trigger === message.cmd || callback.trigger === "all")
-        callback.callback(message.data)
+        callback.callback(message.data, message.id);
     });
   }
 }
@@ -25,11 +28,16 @@ class Client {
     this.ws.on("message", (a) => onMessage(this, a));
     this.ws.on("close", ()=>console.log("crap"))
     this.callbacks = [];
-    this.shakeHand()
+    this.shakeHand();
+
+    this.on("all", (m, id) => {
+      if (id)
+        this.send("received", {id: id});
+    })
   }
 
   shakeHand() {
-    this.send("shakehand", "")
+    this.send("shakehand", { session: "ac2b7fee-f8bb-4238-910c-8e43784e0b7f"})
   }
 
   on(trigger, callback) {
@@ -40,7 +48,10 @@ class Client {
   }
 
   send(cmd, data) {
-    this.ws.send(JSON.stringify({cmd: cmd, data: data}))
+    // Try to send to client, and also add to queue
+    var id = uuid.v4();
+    this.ws.send(JSON.stringify({cmd: cmd, data: data, id: id}));
+  //this.messageQueue[id] = {cmd: cmd, data: data, id: id};
   }
 }
 
